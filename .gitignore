@@ -1,0 +1,45 @@
+# misc
+.DS_Store
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and editors
+.vscode/*
+!.vscode/*.example.json
+/.idea
+*.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.idea
+.data
+
+# Virtual venvs
+.venv
+venv/
+*.pyc
+bin/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+*.sqlite3
