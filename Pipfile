@@ -16,6 +16,10 @@ black = "*"
 djangorestframework-stubs = "*"
 django-stubs = "*"
 pre-commit = "*"
+pytest-django = "*"
+factory-boy = "*"
+faker = "*"
+pytest-factoryboy = "*"
 
 [requires]
 python_version = "3.10"
