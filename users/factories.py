@@ -8,4 +8,4 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     email = factory.Faker("email")
     phone_number = factory.Sequence(lambda n: "+251{:09}".format(n))
-    password = factory.Faker("password")
+    password = factory.PostGenerationMethodCall("set_password", "superstrongpassword")

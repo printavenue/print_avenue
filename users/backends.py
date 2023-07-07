@@ -1,21 +1,18 @@
 from typing import Union
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.db.models import Q
 
-from users.models import User as CustomUser
-
-User = get_user_model()
+from users.models import User
 
 
 class EmailPhoneUsernameAuthenticationBackend(object):
     @staticmethod
-    def authenticate(request, username=None, password=None) -> Union[CustomUser, None]:
+    def authenticate(request, username=None, password=None) -> Union[User, None]:
         try:
-            user = CustomUser.objects.get(Q(phone_number=username) | Q(email=username))
+            user = User.objects.get(Q(phone_number=username) | Q(email=username))
 
-        except CustomUser.DoesNotExist:
+        except User.DoesNotExist:
             return None
 
         if user and check_password(password, user.password):
@@ -24,8 +21,8 @@ class EmailPhoneUsernameAuthenticationBackend(object):
         return None
 
     @staticmethod
-    def get_user(user_id: int) -> Union[CustomUser, None]:
+    def get_user(user_id: int) -> Union[User, None]:
         try:
-            return CustomUser.objects.get(pk=user_id)
-        except CustomUser.DoesNotExist:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
             return None

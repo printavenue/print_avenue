@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Union
 from uuid import uuid4
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -14,7 +14,9 @@ from users.constants import PHONE_NUMBER_REGEX
 
 
 class UserManager(BaseUserManager["User"]):
-    def create_user(self, email, phone_number, password=None) -> "User":
+    def create_user(
+        self, email: str, phone_number: str, password: Union[str, None] = None
+    ) -> "User":
         if not email or not phone_number:
             raise ValidationError("Both Email and Phone Numer can't be empty.")
         email = self.normalize_email(email)
@@ -23,7 +25,9 @@ class UserManager(BaseUserManager["User"]):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, phone_number, password=None) -> "User":
+    def create_superuser(
+        self, email: str, phone_number: Union[str, None], password: Union[str, None] = None
+    ) -> "User":
         if not email:
             raise ValidationError("Email can't be empty.")
 
@@ -47,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin, PABaseModel):
         unique=True,
         blank=True,
         null=True,
-        validators=[RegexValidator(PHONE_NUMBER_REGEX, "Invalid phone number")],
+        validators=[RegexValidator(PHONE_NUMBER_REGEX, "Invalid phone number.")],
     )
     is_admin = models.BooleanField("Is Admin", default=False)
     is_moderator = models.BooleanField("Is Moderator", default=False)
@@ -71,8 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin, PABaseModel):
         using: str | None = None,
         update_fields: Iterable[str] | None = None,
     ) -> None:
-        self.full_clean()
         if not self.email and not self.phone_number:
-            raise ValidationError("Both Email and Phone Numer can't be empty.")
+            raise ValidationError("Both email and phone number can't be empty.")
 
         return super().save(force_insert, force_update, using, update_fields)
