@@ -18,7 +18,7 @@ class UserManager(BaseUserManager["User"]):
         self, email: str, phone_number: str, password: Union[str, None] = None
     ) -> "User":
         if not email or not phone_number:
-            raise ValidationError("Both Email and Phone Numer can't be empty.")
+            raise ValidationError("Both email and phone number can't be empty.")
         email = self.normalize_email(email)
         user = self.model(email=email, phone_number=phone_number)
         user.set_password(password)
