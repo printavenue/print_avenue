@@ -9,6 +9,7 @@ django-environ = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 dj-rest-auth = "*"
+celery = "*"
 
 [dev-packages]
 mypy = "*"
@@ -24,6 +25,7 @@ factory-boy = "*"
 faker = "*"
 pytest-factoryboy = "*"
 pytest-mock = "*"
+types-six = "*"
 
 [requires]
 python_version = "3.10"
