@@ -27,6 +27,11 @@ class LoginView(GenericAPIView):
         user = EmailPhoneUsernameAuthenticationBackend.authenticate(request, username, password)
 
         if user:
+            if not user.is_verified:
+                return Response(
+                    {"error": 1, "message": "User is not verified."},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
             if user.is_active:
                 token = RefreshToken.for_user(user)
                 return Response(
