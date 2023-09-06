@@ -15,6 +15,20 @@ from users.tokens import AccountActivationTokenGenerator
 
 
 class LoginView(GenericAPIView):
+    """
+    Login to account using username and password.
+    username can be:
+     - email
+     - phone number(including country)
+    and password
+
+    if user is not verified, return 401,
+    if user is not active, return 403,
+    if username or passowrd is not correct, return 401
+    if username and password are correct, send:
+     - token: access token
+     - refresh: refresh token
+    """
     serializer_class = UserLoginSerializer
     permission_classes = [AllowAny]
     authentication_classes: List[Any] = []
@@ -50,6 +64,19 @@ class LoginView(GenericAPIView):
 
 
 class SignUpView(GenericAPIView):
+    """
+    Register user with phone number or email address
+    :body
+     - email
+     - phone number
+     - password
+
+    Raises:
+    400 Bad Request: if both email and phone number are empty
+    400 Bad Request: if user with the given email exists already
+
+    Send Activation link to user email address
+    """
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
     authentication_classes: List[Any] = []
