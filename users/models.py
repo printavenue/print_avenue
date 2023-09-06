@@ -1,4 +1,4 @@
-from typing import Iterable, Union
+from typing import Iterable, Optional
 from uuid import uuid4
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -14,9 +14,7 @@ from users.constants import PHONE_NUMBER_REGEX
 
 
 class UserManager(BaseUserManager["User"]):
-    def create_user(
-        self, email: str, phone_number: str, password: Union[str, None] = None
-    ) -> "User":
+    def create_user(self, email: str, phone_number: str, password: Optional[str] = None) -> "User":
         if not email or not phone_number:
             raise ValidationError("Both email and phone number can't be empty.")
         email = self.normalize_email(email)
@@ -26,7 +24,7 @@ class UserManager(BaseUserManager["User"]):
         return user
 
     def create_superuser(
-        self, email: str, phone_number: Union[str, None], password: Union[str, None] = None
+        self, email: str, phone_number: Optional[str] = None, password: Optional[str] = None
     ) -> "User":
         if not email:
             raise ValidationError("Email can't be empty.")
