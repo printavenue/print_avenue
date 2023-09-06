@@ -44,26 +44,35 @@ class User(AbstractBaseUser, PermissionsMixin, PABaseModel):
     identifier = models.UUIDField(
         "Identifier", unique=True, db_index=True, editable=False, default=uuid4
     )
-    email = models.EmailField("Email", max_length=255, unique=True, blank=True, null=True)
+    email = models.EmailField("Email", max_length=255, null=True, blank=True)
     phone_number = models.CharField(
         "Phone Number",
         max_length=20,
-        unique=True,
-        blank=True,
         null=True,
+        blank=True,
         validators=[RegexValidator(PHONE_NUMBER_REGEX, "Invalid phone number.")],
     )
+    is_active = models.BooleanField("Is active", default=True)
+    is_verified = models.BooleanField("Is verified", default=False)
     is_admin = models.BooleanField("Is Admin", default=False)
     is_moderator = models.BooleanField("Is Moderator", default=False)
 
     objects = UserManager()
 
-    USERNAME_FIELD = "phone_number"
-    REQUIRED_FIELDS = ["email"]
+    USERNAME_FIELD = "email"
 
     class Meta:
         verbose_name = "user"
         verbose_name_plural = "users"
+        unique_together = ["phone_number", "email"]
+
+    @property
+    def is_staff(self):
+        return self.is_moderator
+
+    @property
+    def is_superuser(self):
+        return self.is_admin
 
     def __str__(self) -> str:
         return force_str(self.identifier)

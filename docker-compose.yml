@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  print_avenue_backend:
+    container_name: print_avenue_backend
+    build: .
+    ports:
+      - "8000:8000"
+    network_mode: host
+    environment:
+      - DB_NAME=print_avenue
+      - DB_USER=postgres
+      - DB_PASS=root
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DJANGO_SECRET_KEY=django-insecure--&)201ee(0tbxek5224g(v^opym^lx0lt)m%qacjh*rmxqth0e
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+  db:
+    container_name: db
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=print_avenue
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+volumes:
+  pgdata: {}
